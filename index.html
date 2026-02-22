@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PPL Tracker — Formation Pilote Privé</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">✈</span>
+      <span class="logo-text">PPL<em>Tracker</em></span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-page="dashboard">
+        <span class="nav-icon">◈</span> Dashboard
+      </button>
+      <button class="nav-btn" data-page="devoirs">
+        <span class="nav-icon">◉</span> Devoirs
+      </button>
+      <button class="nav-btn" data-page="emploi">
+        <span class="nav-icon">◫</span> Emploi du temps
+      </button>
+      <button class="nav-btn" data-page="notes">
+        <span class="nav-icon">◎</span> Notes
+      </button>
+      <button class="nav-btn" data-page="bacblanc">
+        <span class="nav-icon">◐</span> Bac Blanc
+      </button>
+    </nav>
+    <div class="sidebar-footer">PPL — Private Pilot Licence</div>
+  </aside>
+
+  <!-- ===== HAMBURGER ===== -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main-content">
+
+    <!-- ========== PAGE: DASHBOARD ========== -->
+    <section class="page active" id="page-dashboard">
+      <header class="page-header">
+        <h1>Dashboard</h1>
+        <p class="page-sub">Vue d'ensemble de ta progression PPL</p>
+      </header>
+
+      <div class="dash-grid">
+        <!-- Global progress -->
+        <div class="card card-wide">
+          <div class="card-label">Progression globale</div>
+          <div class="progress-ring-wrap">
+            <canvas id="ringCanvas" width="160" height="160"></canvas>
+            <div class="ring-center">
+              <span id="ringPercent">0%</span>
+              <small>moyenne</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subject cards -->
+        <div class="card subjects-card">
+          <div class="card-label">Matières</div>
+          <div id="subjectsList" class="subjects-list"></div>
+        </div>
+
+        <!-- Recent homework -->
+        <div class="card">
+          <div class="card-label">Devoirs urgents</div>
+          <div id="urgentHomework" class="urgent-list"></div>
+        </div>
+
+        <!-- Quick stats -->
+        <div class="card">
+          <div class="card-label">Statistiques rapides</div>
+          <div id="quickStats" class="quick-stats"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: DEVOIRS ========== -->
+    <section class="page" id="page-devoirs">
+      <header class="page-header">
+        <h1>Devoirs</h1>
+        <p class="page-sub">Gérer tes tâches et révisions</p>
+      </header>
+
+      <div class="toolbar">
+        <button class="btn-primary" id="btnAddDevoir">+ Ajouter un devoir</button>
+        <div class="filters">
+          <select id="filterMatiere" class="select-input">
+            <option value="">Toutes les matières</option>
+          </select>
+          <select id="filterStatut" class="select-input">
+            <option value="">Tous les statuts</option>
+            <option value="todo">À faire</option>
+            <option value="inprogress">En cours</option>
+            <option value="done">Terminé</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="devoirsList" class="devoirs-grid"></div>
+    </section>
+
+    <!-- ========== PAGE: EMPLOI DU TEMPS ========== -->
+    <section class="page" id="page-emploi">
+      <header class="page-header">
+        <h1>Emploi du temps</h1>
+        <p class="page-sub">Vue semaine personnalisable</p>
+      </header>
+
+      <div class="toolbar">
+        <button class="btn-primary" id="btnAddSlot">+ Ajouter un créneau</button>
+        <div class="week-nav">
+          <button class="btn-ghost" id="prevWeek">‹ Semaine préc.</button>
+          <span id="weekLabel" class="week-label"></span>
+          <button class="btn-ghost" id="nextWeek">Semaine suiv. ›</button>
+        </div>
+      </div>
+
+      <div class="schedule-wrap">
+        <div class="schedule-grid" id="scheduleGrid"></div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: NOTES ========== -->
+    <section class="page" id="page-notes">
+      <header class="page-header">
+        <h1>Notes & Scores</h1>
+        <p class="page-sub">Suivi de tes performances</p>
+      </header>
+
+      <div class="toolbar">
+        <button class="btn-primary" id="btnAddNote">+ Ajouter une note</button>
+      </div>
+
+      <div class="notes-grid">
+        <div class="card card-wide">
+          <div class="card-label">Moyennes par matière</div>
+          <canvas id="barChart" height="220"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Historique des notes</div>
+          <div id="notesHistory" class="notes-history"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Badges obtenus</div>
+          <div id="badgesZone" class="badges-zone"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PAGE: BAC BLANC ========== -->
+    <section class="page" id="page-bacblanc">
+      <header class="page-header">
+        <h1>Bac Blanc</h1>
+        <p class="page-sub">Entraîne-toi dans les conditions réelles</p>
+      </header>
+
+      <div class="bacblanc-wrap">
+        <div class="card bacblanc-setup" id="bbSetup">
+          <div class="card-label">Configurer le Bac Blanc</div>
+          <div class="bb-form">
+            <label>Matière
+              <select id="bbMatiere" class="select-input"></select>
+            </label>
+            <label>Durée (minutes)
+              <input type="number" id="bbDuration" class="text-input" value="60" min="1" max="300" />
+            </label>
+            <button class="btn-primary btn-large" id="btnStartBB">▶ Lancer le Bac Blanc</button>
+          </div>
+        </div>
+
+        <div class="card bacblanc-timer hidden" id="bbTimer">
+          <div class="card-label">Examen en cours</div>
+          <div class="timer-display" id="timerDisplay">00:00</div>
+          <div class="timer-matiere" id="timerMatiere"></div>
+          <div class="timer-bar-wrap"><div class="timer-bar" id="timerBar"></div></div>
+          <button class="btn-danger" id="btnStopBB">■ Terminer l'examen</button>
+        </div>
+
+        <div class="card bacblanc-score hidden" id="bbScore">
+          <div class="card-label">Saisir ton score</div>
+          <div class="score-form">
+            <div class="score-result-label" id="bbResultLabel"></div>
+            <input type="number" id="bbScoreInput" class="score-input" min="0" max="100" placeholder="Score (0-100)" />
+            <button class="btn-primary" id="btnSaveScore">Enregistrer</button>
+          </div>
+        </div>
+
+        <div class="card card-wide">
+          <div class="card-label">Historique des Bacs Blancs</div>
+          <div id="bbHistory" class="bb-history"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== MODAL: DEVOIR ===== -->
+  <div class="modal-overlay hidden" id="modalDevoir">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalDevoirTitle">Nouveau devoir</h2>
+        <button class="modal-close" id="closeDevoirModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label>Titre
+          <input type="text" id="devoirTitre" class="text-input" placeholder="Ex: QCM Météo chapitre 3" />
+        </label>
+        <label>Matière
+          <select id="devoirMatiere" class="select-input"></select>
+        </label>
+        <label>Date limite
+          <input type="date" id="devoirDate" class="text-input" />
+        </label>
+        <label>Priorité
+          <select id="devoirPriorite" class="select-input">
+            <option value="low">Faible</option>
+            <option value="medium">Moyenne</option>
+            <option value="high">Haute</option>
+          </select>
+        </label>
+        <label>Statut
+          <select id="devoirStatut" class="select-input">
+            <option value="todo">À faire</option>
+            <option value="inprogress">En cours</option>
+            <option value="done">Terminé</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelDevoirModal">Annuler</button>
+        <button class="btn-primary" id="saveDevoirModal">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CRÉNEAU ===== -->
+  <div class="modal-overlay hidden" id="modalSlot">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Nouveau créneau</h2>
+        <button class="modal-close" id="closeSlotModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label>Jour
+          <select id="slotDay" class="select-input">
+            <option value="0">Lundi</option>
+            <option value="1">Mardi</option>
+            <option value="2">Mercredi</option>
+            <option value="3">Jeudi</option>
+            <option value="4">Vendredi</option>
+            <option value="5">Samedi</option>
+            <option value="6">Dimanche</option>
+          </select>
+        </label>
+        <label>Heure de début
+          <input type="time" id="slotStart" class="text-input" value="09:00" />
+        </label>
+        <label>Heure de fin
+          <input type="time" id="slotEnd" class="text-input" value="10:00" />
+        </label>
+        <label>Matière
+          <select id="slotMatiere" class="select-input"></select>
+        </label>
+        <label>Description
+          <input type="text" id="slotDesc" class="text-input" placeholder="Ex: Révision QCM" />
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelSlotModal">Annuler</button>
+        <button class="btn-primary" id="saveSlotModal">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: NOTE ===== -->
+  <div class="modal-overlay hidden" id="modalNote">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Ajouter une note</h2>
+        <button class="modal-close" id="closeNoteModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label>Matière
+          <select id="noteMatiere" class="select-input"></select>
+        </label>
+        <label>Score (0 – 100)
+          <input type="number" id="noteScore" class="text-input" min="0" max="100" placeholder="85" />
+        </label>
+        <label>Description (optionnel)
+          <input type="text" id="noteDesc" class="text-input" placeholder="Ex: QCM entraînement #2" />
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelNoteModal">Annuler</button>
+        <button class="btn-primary" id="saveNoteModal">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
